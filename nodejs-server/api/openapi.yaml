@@ -1,0 +1,194 @@
+openapi: 3.0.0
+info:
+  title: API Кинотеатра
+  description: Бизнес-модель Кинотеатра
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/LUN111/FB-01/1.0.0
+  description: SwaggerHub API Auto Mocking
+paths:
+  /booking:
+    put:
+      summary: Обновлние информации о статусе бронирования
+      description: Обновляет информацию о статусе брони в категории Booking
+      operationId: bookingPUT
+      requestBody:
+        content:
+          appliction/json:
+            schema:
+              $ref: '#/components/schemas/booking_body'
+      responses:
+        "200":
+          description: ОК
+          content:
+            appliction/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+      x-swagger-router-controller: Default
+    post:
+      summary: Забронировать место в зале
+      description: Добавляет информацию в таблицу Бронирование
+      operationId: bookingPOST
+      requestBody:
+        content:
+          appliction/json:
+            schema:
+              $ref: '#/components/schemas/booking_body_1'
+      responses:
+        "200":
+          description: ОК
+          content:
+            appliction/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+      x-swagger-router-controller: Default
+    delete:
+      summary: "Отменяет бронь билета на сеанс в кинотеатре, в категории бронирова\
+        ние."
+      operationId: bookingDELETE
+      parameters:
+      - name: id
+        in: query
+        description: Идентификатор бронирования сеанса
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: ОК
+      x-swagger-router-controller: Default
+  /session:
+    put:
+      summary: Обновлние информации о времени сеанса
+      description: Обновляет информацию время сеанса в таблице Сеанс
+      operationId: sessionPUT
+      requestBody:
+        content:
+          appliction/json:
+            schema:
+              $ref: '#/components/schemas/session_body'
+      responses:
+        "200":
+          description: ОК
+          content:
+            appliction/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_2'
+      x-swagger-router-controller: Default
+  /Seats:
+    get:
+      summary: Получение информации о наличии мест в зале
+      description: Получает информацию о свободных местах из таблицы Места в зале
+      operationId: seatsGET
+      parameters:
+      - name: id_session
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: number
+      - name: IsFree
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: boolean
+      responses:
+        "200":
+          description: ОК
+          content:
+            appliction/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_3'
+      x-swagger-router-controller: Default
+components:
+  schemas:
+    booking_body:
+      type: object
+      properties:
+        id_booking:
+          type: number
+        status:
+          type: string
+    inline_response_200:
+      type: object
+      properties:
+        id_booking:
+          type: number
+        dataTime:
+          type: string
+          format: date-time
+        status:
+          type: string
+          format: booking/booking error
+      example:
+        id_booking: 0.80082819046101150206595775671303272247314453125
+        dataTime: 2000-01-23T04:56:07.000+00:00
+        status: status
+    booking_body_1:
+      type: object
+      properties:
+        id_sesion:
+          type: string
+        id_seat:
+          type: string
+        dateTame:
+          type: string
+          format: date-time
+    inline_response_200_1:
+      type: object
+      properties:
+        id_booking:
+          type: string
+        dateTame:
+          type: string
+          format: date-time
+      example:
+        id_booking: id_booking
+        dateTame: 2000-01-23T04:56:07.000+00:00
+    session_body:
+      type: object
+      properties:
+        id_sesion:
+          type: string
+        dataTime:
+          type: string
+          format: date-time
+        name:
+          type: string
+    inline_response_200_2:
+      type: object
+      properties:
+        type:
+          type: string
+        price:
+          type: number
+        amount:
+          type: number
+      example:
+        amount: 6.02745618307040320615897144307382404804229736328125
+        price: 0.80082819046101150206595775671303272247314453125
+        type: type
+    inline_response_200_3:
+      type: object
+      properties:
+        id_seat:
+          type: string
+        price:
+          type: number
+        amount:
+          type: number
+        booking:
+          type: boolean
+        numberSeats:
+          type: integer
+      example:
+        amount: 6.02745618307040320615897144307382404804229736328125
+        booking: true
+        price: 0.80082819046101150206595775671303272247314453125
+        id_seat: id_seat
+        numberSeats: 1

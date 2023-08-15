@@ -13,6 +13,16 @@ module.exports.bookingDELETE = function bookingDELETE (req, res, next, id) {
     });
 };
 
+module.exports.bookingGET = function bookingGET (req, res, next, id_card) {
+  Default.bookingGET(id_card)
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
+
 module.exports.bookingPOST = function bookingPOST (req, res, next, body) {
   Default.bookingPOST(body)
     .then(function (response) {
@@ -33,8 +43,18 @@ module.exports.bookingPUT = function bookingPUT (req, res, next, body) {
     });
 };
 
-module.exports.seatsGET = function seatsGET (req, res, next, id_session, isFree) {
-  Default.seatsGET(id_session, isFree)
+module.exports.cinema_hallGET = function cinema_hallGET (req, res, next, id_session, statusSeat) {
+  Default.cinema_hallGET(id_session, statusSeat)
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
+
+module.exports.paymentGET = function paymentGET (req, res, next, id_card) {
+  Default.paymentGET(id_card)
     .then(function (response) {
       utils.writeJson(res, response);
     })

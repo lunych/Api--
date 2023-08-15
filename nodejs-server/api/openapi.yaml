@@ -8,6 +8,27 @@ servers:
   description: SwaggerHub API Auto Mocking
 paths:
   /booking:
+    get:
+      summary: Обновление информации о бонусной карте при бронировании
+      description: "Обновляет информацию о бонусной карте пользователя,как часто п\
+        ользователь пользуется картой."
+      operationId: bookingGET
+      parameters:
+      - name: id_card
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: ОК
+          content:
+            appliction/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+      x-swagger-router-controller: Default
     put:
       summary: Обновлние информации о статусе бронирования
       description: Обновляет информацию о статусе брони в категории Booking
@@ -23,7 +44,7 @@ paths:
           content:
             appliction/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200'
+                $ref: '#/components/schemas/inline_response_200_1'
       x-swagger-router-controller: Default
     post:
       summary: Забронировать место в зале
@@ -40,7 +61,7 @@ paths:
           content:
             appliction/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_1'
+                $ref: '#/components/schemas/inline_response_200_2'
       x-swagger-router-controller: Default
     delete:
       summary: "Отменяет бронь билета на сеанс в кинотеатре, в категории бронирова\
@@ -75,13 +96,13 @@ paths:
           content:
             appliction/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_2'
+                $ref: '#/components/schemas/inline_response_200_3'
       x-swagger-router-controller: Default
-  /Seats:
+  /cinema_hall:
     get:
       summary: Получение информации о наличии мест в зале
-      description: Получает информацию о свободных местах из таблицы Места в зале
-      operationId: seatsGET
+      description: Получает информацию о свободных местах из таблицы cinema_hall
+      operationId: cinema_hallGET
       parameters:
       - name: id_session
         in: query
@@ -90,7 +111,7 @@ paths:
         explode: true
         schema:
           type: number
-      - name: IsFree
+      - name: statusSeat
         in: query
         required: false
         style: form
@@ -103,22 +124,51 @@ paths:
           content:
             appliction/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_3'
+                $ref: '#/components/schemas/inline_response_200_4'
+      x-swagger-router-controller: Default
+  /Payment:
+    get:
+      summary: Получение информации об оплате за билет по баллам бонусной карты
+      description: Получение информации какую часть стоимости билетов клиенты оплачивают
+        баллами
+      operationId: paymentGET
+      parameters:
+      - name: id_card
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: ОК
+          content:
+            appliction/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_5'
       x-swagger-router-controller: Default
 components:
   schemas:
-    booking_body:
-      type: object
-      properties:
-        id_booking:
-          type: number
-        status:
-          type: string
     inline_response_200:
       type: object
       properties:
         id_booking:
-          type: number
+          type: string
+      example:
+        id_booking: id_booking
+    booking_body:
+      type: object
+      properties:
+        id_booking:
+          type: integer
+        status:
+          type: string
+    inline_response_200_1:
+      type: object
+      properties:
+        id_booking:
+          type: integer
         dataTime:
           type: string
           format: date-time
@@ -126,29 +176,34 @@ components:
           type: string
           format: booking/booking error
       example:
-        id_booking: 0.80082819046101150206595775671303272247314453125
+        id_booking: 0
         dataTime: 2000-01-23T04:56:07.000+00:00
         status: status
     booking_body_1:
       type: object
       properties:
         id_sesion:
-          type: string
+          type: integer
         id_seat:
-          type: string
+          type: integer
+        id_card:
+          type: integer
         dateTame:
           type: string
           format: date-time
-    inline_response_200_1:
+    inline_response_200_2:
       type: object
       properties:
         id_booking:
-          type: string
+          type: integer
+        ball:
+          type: integer
         dateTame:
           type: string
           format: date-time
       example:
-        id_booking: id_booking
+        id_booking: 0
+        ball: 6
         dateTame: 2000-01-23T04:56:07.000+00:00
     session_body:
       type: object
@@ -160,7 +215,7 @@ components:
           format: date-time
         name:
           type: string
-    inline_response_200_2:
+    inline_response_200_3:
       type: object
       properties:
         type:
@@ -173,7 +228,7 @@ components:
         amount: 6.02745618307040320615897144307382404804229736328125
         price: 0.80082819046101150206595775671303272247314453125
         type: type
-    inline_response_200_3:
+    inline_response_200_4:
       type: object
       properties:
         id_seat:
@@ -183,12 +238,25 @@ components:
         amount:
           type: number
         booking:
-          type: boolean
+          type: integer
         numberSeats:
           type: integer
       example:
         amount: 6.02745618307040320615897144307382404804229736328125
-        booking: true
+        booking: 1
         price: 0.80082819046101150206595775671303272247314453125
         id_seat: id_seat
-        numberSeats: 1
+        numberSeats: 5
+    inline_response_200_5:
+      type: object
+      properties:
+        id_Payment:
+          type: integer
+        amount_ball:
+          type: number
+        amount:
+          type: integer
+      example:
+        amount: 1
+        amount_ball: 6.02745618307040320615897144307382404804229736328125
+        id_Payment: 0
